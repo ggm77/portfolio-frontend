@@ -471,19 +471,19 @@ function App({ preloadedState }: { preloadedState?: PreloadedState } = {}) {
             <div style={{ fontSize: 13, color: 'var(--accent)', marginBottom: 8 }}>
               {formatPeriod(selectedProject.startAt, selectedProject.endAt)}
             </div>
-            <h3 style={{ fontSize: 22, fontWeight: 700, margin: '0 0 6px' }}>
-              {selectedProject.name}
-            </h3>
             <p
               style={{
                 fontSize: 14,
                 color: 'oklch(0.5 0.015 245)',
-                margin: '0 0 20px',
+                margin: '0 0 6px',
                 textWrap: 'pretty',
               }}
             >
               {selectedProject.tagline}
             </p>
+            <h3 style={{ fontSize: 22, fontWeight: 700, margin: '0 0 20px' }}>
+              {selectedProject.name}
+            </h3>
             <p
               style={{
                 fontSize: 14,
