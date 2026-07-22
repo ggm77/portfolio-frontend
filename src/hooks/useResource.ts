@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface ResourceState<T> {
   data: T | null;
@@ -6,10 +6,11 @@ interface ResourceState<T> {
   error: boolean;
 }
 
-export function useResource<T>(fetcher: () => Promise<T>): ResourceState<T> {
-  const [data, setData] = useState<T | null>(null);
-  const [loading, setLoading] = useState(true);
+export function useResource<T>(fetcher: () => Promise<T>, initialData?: T): ResourceState<T> {
+  const [data, setData] = useState<T | null>(initialData ?? null);
+  const [loading, setLoading] = useState(initialData === undefined);
   const [error, setError] = useState(false);
+  const hadInitialData = useRef(initialData !== undefined);
 
   useEffect(() => {
     let cancelled = false;
@@ -22,8 +23,8 @@ export function useResource<T>(fetcher: () => Promise<T>): ResourceState<T> {
       })
       .catch(() => {
         if (cancelled) return;
-        setError(true);
         setLoading(false);
+        if (!hadInitialData.current) setError(true);
       });
 
     return () => {

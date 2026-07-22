@@ -49,6 +49,13 @@ export interface LoginResponse {
   refreshToken: string;
 }
 
+export interface PreloadedState {
+  me?: MeResponse;
+  stacks?: StackResponse[];
+  projects?: ProjectResponse[];
+  history?: HistoryResponse[];
+}
+
 export interface ProjectCreate {
   name: string;
   tagline: string;

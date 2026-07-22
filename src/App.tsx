@@ -1,6 +1,6 @@
 import { useState, type CSSProperties, type ReactNode } from 'react';
 import { getHistory, getMe, getProjects, getStacks } from './api/client';
-import type { HistoryResponse, ProjectResponse } from './api/types';
+import type { HistoryResponse, PreloadedState, ProjectResponse } from './api/types';
 import { useResource } from './hooks/useResource';
 import { formatPeriod } from './lib/format';
 import './App.css';
@@ -23,11 +23,11 @@ function StatusText({ children }: { children: ReactNode }) {
   );
 }
 
-function App() {
-  const me = useResource(getMe);
-  const stacks = useResource(getStacks);
-  const projects = useResource(getProjects);
-  const history = useResource(getHistory);
+function App({ preloadedState }: { preloadedState?: PreloadedState } = {}) {
+  const me = useResource(getMe, preloadedState?.me);
+  const stacks = useResource(getStacks, preloadedState?.stacks);
+  const projects = useResource(getProjects, preloadedState?.projects);
+  const history = useResource(getHistory, preloadedState?.history);
 
   const [selectedProject, setSelectedProject] = useState<ProjectResponse | null>(null);
 
