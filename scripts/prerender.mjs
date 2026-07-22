@@ -13,16 +13,16 @@ let template = readFileSync(indexPath, 'utf-8');
 if (!template.includes('<div id="root"></div>')) {
   throw new Error('[prerender] could not find #root mount point in dist/index.html');
 }
-template = template.replace('<div id="root"></div>', `<div id="root">${html}</div>`);
 
+// Keep both the rendered markup and the hydration state inside <body>, right after
+// #root, so bots/tools that only read <body> (and anything that truncates the raw
+// HTML by length) see the real content instead of it being pushed down by <head>.
+// The state script is a classic (non-module) script, so it still runs before the
+// deferred main module script regardless of where that ends up in the document.
 const stateJson = JSON.stringify(preloadedState).replace(/</g, '\\u003c');
-const mainScriptTag = /<script type="module" crossorigin src="\/assets\/main-[^"]+\.js"><\/script>/;
-if (!mainScriptTag.test(template)) {
-  throw new Error('[prerender] could not find main entry script tag in dist/index.html');
-}
 template = template.replace(
-  mainScriptTag,
-  (match) => `<script>window.__PRELOADED_STATE__ = ${stateJson};</script>\n    ${match}`,
+  '<div id="root"></div>',
+  `<div id="root">${html}</div>\n    <script>window.__PRELOADED_STATE__ = ${stateJson};</script>`,
 );
 
 writeFileSync(indexPath, template);
