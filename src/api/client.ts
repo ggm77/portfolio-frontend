@@ -34,17 +34,38 @@ interface RequestOptions {
   isForm?: boolean;
 }
 
+// Called when a token-authenticated request gets a 401. Should return a fresh
+// access token (after refreshing) or null if refreshing isn't possible/failed.
+type UnauthorizedHandler = () => Promise<string | null>;
+let unauthorizedHandler: UnauthorizedHandler | null = null;
+
+export function setUnauthorizedHandler(handler: UnauthorizedHandler | null): void {
+  unauthorizedHandler = handler;
+}
+
+function doFetch(path: string, method: string, headers: Record<string, string>, body: unknown, isForm?: boolean) {
+  return fetch(`${API_BASE_URL}${path}`, {
+    method,
+    headers,
+    body: isForm ? (body as FormData) : body !== undefined ? JSON.stringify(body) : undefined,
+  });
+}
+
 export async function apiRequest<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const { method = 'GET', token, body, isForm } = options;
   const headers: Record<string, string> = {};
   if (token) headers.Authorization = `Bearer ${token}`;
   if (!isForm && body !== undefined) headers['Content-Type'] = 'application/json';
 
-  const res = await fetch(`${API_BASE_URL}${path}`, {
-    method,
-    headers,
-    body: isForm ? (body as FormData) : body !== undefined ? JSON.stringify(body) : undefined,
-  });
+  let res = await doFetch(path, method, headers, body, isForm);
+
+  if (res.status === 401 && token && unauthorizedHandler) {
+    const freshToken = await unauthorizedHandler();
+    if (freshToken) {
+      headers.Authorization = `Bearer ${freshToken}`;
+      res = await doFetch(path, method, headers, body, isForm);
+    }
+  }
 
   if (!res.ok) {
     let message = `요청 실패 (${res.status})`;
@@ -71,6 +92,8 @@ export const getImages = () => apiRequest<ImageResponse[]>('/images');
 // Auth
 export const login = (password: string) =>
   apiRequest<LoginResponse>('/auth/login', { method: 'POST', body: { password } });
+export const refreshTokens = (refreshToken: string) =>
+  apiRequest<LoginResponse>('/auth/refresh', { method: 'POST', body: { refreshToken } });
 
 // Me (singleton)
 export const createMe = (token: string, data: MeCreate) =>

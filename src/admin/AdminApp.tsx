@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { ApiError } from '../api/client';
-import { clearToken, getToken, setToken } from './auth';
+import { useEffect, useState } from 'react';
+import { ApiError, refreshTokens, setUnauthorizedHandler } from '../api/client';
+import type { LoginResponse } from '../api/types';
+import { clearTokens, getRefreshToken, getToken, setTokens } from './auth';
 import LoginForm from './components/LoginForm';
 import MeSection from './components/MeSection';
 import StacksSection from './components/StacksSection';
@@ -22,15 +23,33 @@ function AdminApp() {
   const [token, setTokenState] = useState<string | null>(() => getToken());
   const [tab, setTab] = useState<Tab>('me');
 
-  const handleLogin = (accessToken: string) => {
-    setToken(accessToken);
-    setTokenState(accessToken);
+  const handleLogin = (res: LoginResponse) => {
+    setTokens(res.accessToken, res.refreshToken);
+    setTokenState(res.accessToken);
   };
 
   const handleLogout = () => {
-    clearToken();
+    clearTokens();
     setTokenState(null);
   };
+
+  // Silently refresh the access token when a request comes back 401. api/client
+  // retries the failed request once with the new token before giving up.
+  useEffect(() => {
+    setUnauthorizedHandler(async () => {
+      const rt = getRefreshToken();
+      if (!rt) return null;
+      try {
+        const res = await refreshTokens(rt);
+        setTokens(res.accessToken, res.refreshToken);
+        setTokenState(res.accessToken);
+        return res.accessToken;
+      } catch {
+        return null;
+      }
+    });
+    return () => setUnauthorizedHandler(null);
+  }, []);
 
   // Returns true if the error was an expired/invalid-token 401 and was handled.
   const handleAuthError = (err: unknown): boolean => {

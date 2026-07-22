@@ -1,8 +1,9 @@
 import { useState, type FormEvent } from 'react';
 import { ApiError, login } from '../../api/client';
+import type { LoginResponse } from '../../api/types';
 
 interface Props {
-  onSuccess: (accessToken: string) => void;
+  onSuccess: (res: LoginResponse) => void;
 }
 
 function LoginForm({ onSuccess }: Props) {
@@ -16,7 +17,7 @@ function LoginForm({ onSuccess }: Props) {
     setLoading(true);
     try {
       const res = await login(password);
-      onSuccess(res.accessToken);
+      onSuccess(res);
     } catch (err) {
       setError(err instanceof ApiError ? err.message : '로그인에 실패했습니다.');
     } finally {
