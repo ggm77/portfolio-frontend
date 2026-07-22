@@ -13,9 +13,8 @@ interface ContactLink {
 const ACCENT_COLOR = '#3B6EA8';
 
 const links: ContactLink[] = [
-  { label: 'GitHub', url: 'https://github.com/' },
-  { label: 'Email', url: 'mailto:you@example.com' },
-  { label: 'Blog', url: '#' },
+  { label: 'GitHub', url: 'https://github.com/ggm77' },
+  { label: 'Email', url: 'mailto:shm040806@gmail.com' },
 ];
 
 function StatusText({ children }: { children: ReactNode }) {
