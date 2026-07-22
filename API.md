@@ -4,7 +4,7 @@
 
 - Base URL: `/api/v1`
 - 데이터 형식: `application/json` (이미지 업로드는 `multipart/form-data`)
-- 인증: JWT Bearer 토큰. `Authorization: Header`가 필요한 API는 아래 표에 🔒로 표시.
+- 인증: JWT Bearer 토큰. `Authorization` 헤더가 필요한 API는 아래 표에 🔒로 표시.
 
 ```
 Authorization: Bearer <accessToken>
@@ -52,8 +52,11 @@ Authorization: Bearer <accessToken>
 | 필드 | 타입 | 필수 | 제약 |
 |---|---|---|---|
 | name | string | O | 최대 100자 |
+| tagline | string | O | 최대 200자 (한 줄 소개) |
 | content | string | O | 최대 4096자 |
+| highlights | string[] | - | 기본값 `[]` |
 | tags | string[] | - | 기본값 `[]` |
+| links | Link[] | - | 기본값 `[]`. `Link = { label: string(≤50자), url: string(≤500자) }` |
 | startAt | datetime | O | |
 | endAt | datetime | - | |
 
@@ -64,9 +67,15 @@ Authorization: Bearer <accessToken>
 ```json
 {
   "id": 1,
-  "name": "string",
+  "name": "FSHS",
+  "tagline": "저사양 하드웨어를 위한 홈 NAS 애플리케이션",
   "content": "string",
-  "tags": ["string"],
+  "highlights": ["FastAPI + 비동기 I/O로 저사양 환경에서도 낮은 지연"],
+  "tags": ["FastAPI", "Python", "Docker", "Linux"],
+  "links": [
+    { "label": "GitHub", "url": "https://github.com/..." },
+    { "label": "Demo", "url": "https://..." }
+  ],
   "startAt": "2026-01-01T00:00:00",
   "endAt": null
 }
@@ -96,7 +105,7 @@ Authorization: Bearer <accessToken>
 | project_name | string | O | 최대 100자 |
 | content | string | O | 최대 500자 |
 | startAt | datetime | O | |
-| endAt | datetime | O | |
+| endAt | datetime | - | 진행 중이면 생략 가능 |
 
 **HistoryUpdate**: 위 필드 전부 선택(optional). 보낸 필드만 반영됨.
 
@@ -109,7 +118,7 @@ Authorization: Bearer <accessToken>
   "project_name": "string",
   "content": "string",
   "startAt": "2026-01-01T00:00:00",
-  "endAt": "2026-02-01T00:00:00"
+  "endAt": null
 }
 ```
 

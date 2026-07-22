@@ -285,12 +285,12 @@ function App() {
                       margin: '0 0 16px',
                       textWrap: 'pretty',
                       display: '-webkit-box',
-                      WebkitLineClamp: 3,
+                      WebkitLineClamp: 2,
                       WebkitBoxOrient: 'vertical',
                       overflow: 'hidden',
                     }}
                   >
-                    {p.content}
+                    {p.tagline}
                   </p>
                   <div
                     style={{
@@ -472,25 +472,53 @@ function App() {
             <div style={{ fontSize: 13, color: 'var(--accent)', marginBottom: 8 }}>
               {formatPeriod(selectedProject.startAt, selectedProject.endAt)}
             </div>
-            <h3 style={{ fontSize: 22, fontWeight: 700, margin: '0 0 18px' }}>
+            <h3 style={{ fontSize: 22, fontWeight: 700, margin: '0 0 6px' }}>
               {selectedProject.name}
             </h3>
             <p
               style={{
                 fontSize: 14,
+                color: 'oklch(0.5 0.015 245)',
+                margin: '0 0 20px',
+                textWrap: 'pretty',
+              }}
+            >
+              {selectedProject.tagline}
+            </p>
+            <p
+              style={{
+                fontSize: 14,
                 color: 'oklch(0.38 0.02 245)',
-                margin: '0 0 24px',
+                margin: '0 0 20px',
                 textWrap: 'pretty',
                 whiteSpace: 'pre-wrap',
               }}
             >
               {selectedProject.content}
             </p>
+            {selectedProject.highlights.length > 0 && (
+              <ul
+                style={{
+                  margin: '0 0 24px',
+                  paddingLeft: 20,
+                  fontSize: 14,
+                  color: 'oklch(0.38 0.02 245)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 6,
+                }}
+              >
+                {selectedProject.highlights.map((h) => (
+                  <li key={h}>{h}</li>
+                ))}
+              </ul>
+            )}
             <div
               style={{
                 display: 'flex',
                 flexWrap: 'wrap',
                 gap: 6,
+                marginBottom: selectedProject.links.length > 0 ? 20 : 0,
               }}
             >
               {selectedProject.tags.map((s) => (
@@ -508,6 +536,15 @@ function App() {
                 </span>
               ))}
             </div>
+            {selectedProject.links.length > 0 && (
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+                {selectedProject.links.map((l) => (
+                  <a key={l.url} href={l.url} target="_blank" rel="noreferrer" className="modal-link">
+                    {l.label}
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}
