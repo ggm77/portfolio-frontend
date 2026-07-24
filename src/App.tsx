@@ -49,7 +49,7 @@ function App({ preloadedState }: { preloadedState?: PreloadedState } = {}) {
           color: 'oklch(0.96 0.005 240)',
           padding: '120px 24px 100px',
           backgroundImage:
-            'repeating-linear-gradient(0deg, oklch(1 0 0 / 0.035) 0px, oklch(1 0 0 / 0.035) 1px, transparent 1px, transparent 28px)',
+            'repeating-linear-gradient(0deg, oklch(1 0 0 / 0.07) 0px, transparent 3px, transparent 28px)',
           overflow: 'hidden',
         }}
       >
