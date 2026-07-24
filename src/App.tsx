@@ -1,6 +1,6 @@
-import { useState, type CSSProperties, type ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { getHistory, getMe, getProjects, getStacks } from './api/client';
-import type { HistoryResponse, PreloadedState, ProjectResponse } from './api/types';
+import type { HistoryResponse, PreloadedState } from './api/types';
 import { useResource } from './hooks/useResource';
 import { formatPeriod } from './lib/format';
 import './App.css';
@@ -28,8 +28,6 @@ function App({ preloadedState }: { preloadedState?: PreloadedState } = {}) {
   const stacks = useResource(getStacks, preloadedState?.stacks);
   const projects = useResource(getProjects, preloadedState?.projects);
   const history = useResource(getHistory, preloadedState?.history);
-
-  const [selectedProject, setSelectedProject] = useState<ProjectResponse | null>(null);
 
   const rootStyle = { '--accent': ACCENT_COLOR } as CSSProperties;
 
@@ -248,12 +246,7 @@ function App({ preloadedState }: { preloadedState?: PreloadedState } = {}) {
               }}
             >
               {projects.data.map((p) => (
-                <button
-                  key={p.id}
-                  type="button"
-                  className="project-card"
-                  onClick={() => setSelectedProject(p)}
-                >
+                <div key={p.id} className="project-card">
                   <div
                     style={{
                       display: 'flex',
@@ -283,10 +276,6 @@ function App({ preloadedState }: { preloadedState?: PreloadedState } = {}) {
                       color: 'oklch(0.42 0.02 245)',
                       margin: '0 0 16px',
                       textWrap: 'pretty',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden',
                     }}
                   >
                     {p.tagline}
@@ -296,7 +285,7 @@ function App({ preloadedState }: { preloadedState?: PreloadedState } = {}) {
                       display: 'flex',
                       flexWrap: 'wrap',
                       gap: 6,
-                      marginBottom: 14,
+                      marginBottom: 20,
                     }}
                   >
                     {p.tags.map((s) => (
@@ -314,8 +303,57 @@ function App({ preloadedState }: { preloadedState?: PreloadedState } = {}) {
                       </span>
                     ))}
                   </div>
-                  <div style={{ fontSize: 12, color: 'var(--accent)' }}>자세히 보기 →</div>
-                </button>
+                  <div
+                    style={{
+                      paddingTop: 20,
+                      borderTop: '1px solid oklch(0.88 0.008 240)',
+                    }}
+                  >
+                    <p
+                      style={{
+                        fontSize: 14,
+                        color: 'oklch(0.38 0.02 245)',
+                        margin: '0 0 20px',
+                        textWrap: 'pretty',
+                        whiteSpace: 'pre-wrap',
+                      }}
+                    >
+                      {p.content}
+                    </p>
+                    {p.highlights.length > 0 && (
+                      <ul
+                        style={{
+                          margin: '0 0 20px',
+                          paddingLeft: 20,
+                          fontSize: 14,
+                          color: 'oklch(0.38 0.02 245)',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: 6,
+                        }}
+                      >
+                        {p.highlights.map((h) => (
+                          <li key={h}>{h}</li>
+                        ))}
+                      </ul>
+                    )}
+                    {p.links.length > 0 && (
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+                        {p.links.map((l) => (
+                          <a
+                            key={l.url}
+                            href={l.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="project-link"
+                          >
+                            {l.label}
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
               ))}
             </div>
           )}
@@ -431,122 +469,6 @@ function App({ preloadedState }: { preloadedState?: PreloadedState } = {}) {
           </div>
         </div>
       </section>
-
-      {/* PROJECT DETAIL MODAL */}
-      {selectedProject && (
-        <div
-          onClick={() => setSelectedProject(null)}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'oklch(0.15 0.02 240 / 0.55)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: 24,
-            zIndex: 50,
-          }}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              maxWidth: 640,
-              width: '100%',
-              maxHeight: '85vh',
-              overflowY: 'auto',
-              background: 'oklch(1 0 0)',
-              borderRadius: 6,
-              padding: 36,
-              position: 'relative',
-            }}
-          >
-            <button
-              type="button"
-              className="close-button"
-              onClick={() => setSelectedProject(null)}
-              aria-label="닫기"
-            >
-              ✕
-            </button>
-            <div style={{ fontSize: 13, color: 'var(--accent)', marginBottom: 8 }}>
-              {formatPeriod(selectedProject.startAt, selectedProject.endAt)}
-            </div>
-            <p
-              style={{
-                fontSize: 14,
-                color: 'oklch(0.5 0.015 245)',
-                margin: '0 0 6px',
-                textWrap: 'pretty',
-              }}
-            >
-              {selectedProject.tagline}
-            </p>
-            <h3 style={{ fontSize: 22, fontWeight: 700, margin: '0 0 20px' }}>
-              {selectedProject.name}
-            </h3>
-            <p
-              style={{
-                fontSize: 14,
-                color: 'oklch(0.38 0.02 245)',
-                margin: '0 0 20px',
-                textWrap: 'pretty',
-                whiteSpace: 'pre-wrap',
-              }}
-            >
-              {selectedProject.content}
-            </p>
-            {selectedProject.highlights.length > 0 && (
-              <ul
-                style={{
-                  margin: '0 0 24px',
-                  paddingLeft: 20,
-                  fontSize: 14,
-                  color: 'oklch(0.38 0.02 245)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 6,
-                }}
-              >
-                {selectedProject.highlights.map((h) => (
-                  <li key={h}>{h}</li>
-                ))}
-              </ul>
-            )}
-            <div
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: 6,
-                marginBottom: selectedProject.links.length > 0 ? 20 : 0,
-              }}
-            >
-              {selectedProject.tags.map((s) => (
-                <span
-                  key={s}
-                  style={{
-                    fontSize: 11,
-                    padding: '3px 8px',
-                    background: 'oklch(0.96 0.006 240)',
-                    borderRadius: 3,
-                    color: 'oklch(0.45 0.02 245)',
-                  }}
-                >
-                  {s}
-                </span>
-              ))}
-            </div>
-            {selectedProject.links.length > 0 && (
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-                {selectedProject.links.map((l) => (
-                  <a key={l.url} href={l.url} target="_blank" rel="noreferrer" className="modal-link">
-                    {l.label}
-                  </a>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

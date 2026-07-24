@@ -12,29 +12,6 @@
   background: oklch(1 0 0);
   border: 1px solid oklch(0.85 0.01 240);
   border-radius: 4px;
-  cursor: pointer;
-  transition: border-color 0.15s;
-  text-align: left;
-  width: 100%;
-  font: inherit;
-  color: inherit;
-}
-
-.project-card:hover {
-  border-color: var(--accent);
-}
-
-.close-button {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: none;
-  border: none;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 18px;
-  color: oklch(0.5 0.015 245);
-  cursor: pointer;
-  line-height: 1;
 }
 
 .contact-link {
@@ -45,7 +22,7 @@
   color: oklch(0.3 0.02 245) !important;
 }
 
-.modal-link {
+.project-link {
   font-size: 13px;
   padding: 8px 16px;
   border: 1px solid oklch(0.8 0.01 240);
