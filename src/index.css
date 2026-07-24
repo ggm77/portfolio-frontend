@@ -9,6 +9,11 @@ body,
   min-height: 100svh;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 body {
   background: oklch(0.985 0.004 240);
   font-family: 'JetBrains Mono', ui-monospace, monospace;
