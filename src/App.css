@@ -1,3 +1,10 @@
+.terminal-dot {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+
 .cursor-blink {
   display: inline-block;
   width: 9px;

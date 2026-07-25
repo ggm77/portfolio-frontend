@@ -45,81 +45,115 @@ function App({ preloadedState }: { preloadedState?: PreloadedState } = {}) {
       <section
         style={{
           position: 'relative',
-          background: 'oklch(0.2 0.025 240)',
+          background: 'oklch(0.96 0.006 240)',
           color: 'oklch(0.96 0.005 240)',
-          padding: '120px 24px 100px',
-          backgroundImage:
-            'repeating-linear-gradient(0deg, transparent 0px, transparent 12px, oklch(1 0 0 / 0.09) 14px, transparent 16px, transparent 28px)',
-          overflow: 'hidden',
+          padding: '80px 24px',
         }}
       >
-        <div style={{ maxWidth: 880, margin: '0 auto', position: 'relative' }}>
+        <div style={{ maxWidth: 880, margin: '0 auto' }}>
           <div
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 10,
-              fontSize: 14,
-              color: 'oklch(0.7 0.03 235)',
-              marginBottom: 28,
+              background: 'oklch(0.2 0.025 240)',
+              borderRadius: 10,
+              border: '1px solid oklch(1 0 0 / 0.08)',
+              boxShadow: '0 24px 60px -20px oklch(0.1 0.02 240 / 0.5)',
+              overflow: 'hidden',
             }}
           >
-            <span>~/portfolio</span>
-            <span style={{ opacity: 0.5 }}>$</span>
-            <span>whoami</span>
-            <span className="cursor-blink" />
-          </div>
-          {me.loading && (
-            <div style={{ fontSize: 15, color: 'oklch(0.75 0.02 235)' }}>불러오는 중…</div>
-          )}
-          {me.error && (
-            <div style={{ fontSize: 15, color: 'oklch(0.75 0.02 235)' }}>
-              소개 정보를 불러오지 못했습니다.
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                padding: '12px 16px',
+                borderBottom: '1px solid oklch(1 0 0 / 0.08)',
+              }}
+            >
+              <span className="terminal-dot" style={{ background: '#ff5f56' }} />
+              <span className="terminal-dot" style={{ background: '#ffbd2e' }} />
+              <span className="terminal-dot" style={{ background: '#27c93f' }} />
+              <span
+                style={{
+                  marginLeft: 'auto',
+                  marginRight: 'auto',
+                  fontSize: 12,
+                  color: 'oklch(0.7 0.03 235)',
+                  transform: 'translateX(-14px)',
+                }}
+              >
+                portfolio — zsh
+              </span>
             </div>
-          )}
-          {me.data && (
-            <>
-              <h1
+            <div style={{ padding: '40px 32px 48px' }}>
+              <div
                 style={{
-                  fontSize: 44,
-                  fontWeight: 700,
-                  lineHeight: 1.35,
-                  margin: '0 0 22px',
-                  letterSpacing: '-0.01em',
-                  textWrap: 'pretty',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 10,
+                  fontSize: 14,
+                  color: 'oklch(0.7 0.03 235)',
+                  marginBottom: 28,
                 }}
               >
-                {me.data.headline}
-              </h1>
-              <p
-                style={{
-                  fontSize: 16,
-                  color: 'oklch(0.82 0.02 235)',
-                  maxWidth: 620,
-                  margin: '0 0 36px',
-                  textWrap: 'pretty',
-                }}
-              >
-                {me.data.subheadline}
-              </p>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-                {me.data.tags.map((tag) => (
-                  <span
-                    key={tag}
+                <span>~/portfolio</span>
+                <span style={{ opacity: 0.5 }}>$</span>
+                <span>whoami</span>
+                <span className="cursor-blink" />
+              </div>
+              {me.loading && (
+                <div style={{ fontSize: 15, color: 'oklch(0.75 0.02 235)' }}>불러오는 중…</div>
+              )}
+              {me.error && (
+                <div style={{ fontSize: 15, color: 'oklch(0.75 0.02 235)' }}>
+                  소개 정보를 불러오지 못했습니다.
+                </div>
+              )}
+              {me.data && (
+                <>
+                  <h1
                     style={{
-                      fontSize: 13,
-                      padding: '6px 12px',
-                      border: '1px solid oklch(1 0 0 / 0.18)',
-                      borderRadius: 3,
-                      color: 'oklch(0.88 0.02 235)',
+                      fontSize: 44,
+                      fontWeight: 700,
+                      lineHeight: 1.35,
+                      margin: '0 0 22px',
+                      letterSpacing: '-0.01em',
+                      textWrap: 'pretty',
+                      color: 'oklch(0.96 0.005 240)',
                     }}
                   >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </>
-          )}
+                    {me.data.headline}
+                  </h1>
+                  <p
+                    style={{
+                      fontSize: 16,
+                      color: 'oklch(0.82 0.02 235)',
+                      maxWidth: 620,
+                      margin: '0 0 36px',
+                      textWrap: 'pretty',
+                    }}
+                  >
+                    {me.data.subheadline}
+                  </p>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+                    {me.data.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        style={{
+                          fontSize: 13,
+                          padding: '6px 12px',
+                          border: '1px solid oklch(1 0 0 / 0.18)',
+                          borderRadius: 3,
+                          color: 'oklch(0.88 0.02 235)',
+                        }}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
         </div>
       </section>
 
