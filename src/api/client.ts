@@ -15,8 +15,11 @@ import type {
   StackUpdate,
 } from './types';
 
-export const API_BASE_URL = 'https://seohamin.com/api/v1';
-export const API_ORIGIN = new URL(API_BASE_URL).origin;
+export const API_ORIGIN = 'https://seohamin.com';
+
+// The API sends no CORS headers, so browser requests only work same-origin.
+// In `vite dev` we go through the dev-server proxy configured in vite.config.ts.
+export const API_BASE_URL = import.meta.env.DEV ? '/api/v1' : `${API_ORIGIN}/api/v1`;
 
 export class ApiError extends Error {
   status: number;

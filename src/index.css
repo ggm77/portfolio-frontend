@@ -1,3 +1,40 @@
+:root {
+  color-scheme: light;
+
+  /* surfaces */
+  --bg: oklch(0.985 0.002 255);
+  --surface: oklch(1 0 0);
+  --fill: oklch(0.3 0.02 255 / 0.045);
+  --fill-hover: oklch(0.3 0.02 255 / 0.085);
+
+  /* lines */
+  --line: oklch(0.3 0.02 255 / 0.13);
+  --line-strong: oklch(0.3 0.02 255 / 0.24);
+
+  /* text */
+  --text: oklch(0.26 0.02 255);
+  --text-muted: oklch(0.45 0.02 255);
+  --text-dim: oklch(0.32 0.018 255);
+
+  /* accents */
+  --accent: oklch(0.52 0.13 250);
+  --accent-bright: oklch(0.43 0.14 250);
+  --accent-soft: oklch(0.52 0.13 250 / 0.1);
+  --accent-line: oklch(0.52 0.13 250 / 0.3);
+  --on-accent: oklch(1 0 0);
+  --ok: oklch(0.56 0.15 150);
+  --ok-soft: oklch(0.56 0.15 150 / 0.12);
+  --ok-line: oklch(0.56 0.15 150 / 0.32);
+
+  --radius: 14px;
+  --maxw: 1080px;
+  --nav-h: 60px;
+
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Pretendard Variable', Pretendard,
+    'Apple SD Gothic Neo', 'Segoe UI', 'Malgun Gothic', system-ui, sans-serif;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -12,37 +49,43 @@ body,
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--nav-h) + 24px);
 }
 
 body {
-  background: oklch(0.985 0.004 240);
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: 1.72;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  text-wrap: pretty;
 }
 
 a {
-  color: oklch(0.5 0.1 235);
+  color: var(--accent);
   text-decoration: none;
 }
 
 a:hover {
-  color: oklch(0.4 0.11 235);
+  color: var(--accent-bright);
   text-decoration: underline;
 }
 
-::selection {
-  background: oklch(0.55 0.1 235 / 0.25);
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
-@keyframes blink {
-  0%,
-  45% {
-    opacity: 1;
-  }
-  50%,
-  95% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+::selection {
+  background: oklch(0.52 0.13 250 / 0.2);
 }
