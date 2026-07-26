@@ -47,17 +47,6 @@ export function Hero({ me }: { me: ResourceState<MeResponse> }) {
                   <h1 className="hero__title">{me.data.headline}</h1>
                   <p className="hero__sub">{me.data.subheadline}</p>
                 </div>
-
-                <Prompt cmd="cat stack.txt" />
-                <div className="hero__out hero__out--tight">
-                  <div className="chips">
-                    {me.data.tags.map((tag) => (
-                      <span key={tag} className="chip chip--accent">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
               </>
             )}
 
