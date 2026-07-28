@@ -28,6 +28,10 @@ export function About({ me }: { me: ResourceState<MeResponse> }) {
             </a>
           </div>
           <div className="spec__row">
+            <span className="spec__k">education</span>
+            <span className="spec__v">한동대학교 23학번</span>
+          </div>
+          <div className="spec__row">
             <span className="spec__k">status</span>
             <span className="spec__v">협업 · 채용 문의 환영</span>
           </div>
